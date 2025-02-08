@@ -34,5 +34,5 @@ st.page_link("pages/titanic.py", label="Would you survive Estonia?", icon="🚤"
 
 st.page_link("pages/titanic.py", label="Would you survive road accidents?", icon="🚑")
 
-st.page_link("pages/titanic.py", label="Would you win in a battle?", icon="⚔️")
+st.page_link("pages/titanic.py", label="Would you win a comic battle?", icon="⚔️")
 
