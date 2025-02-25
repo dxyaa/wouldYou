@@ -35,6 +35,7 @@ columns = ["PassengerId", "Pclass", "Sex", "Age", "SibSp", "Parch", "Fare", "Cab
 train_data = train_data[columns + ["Survived"]]
 test_data = test_data[columns]
 
+
 # Handle missing values
 train_data.fillna({"Age": train_data["Age"].median(), "Fare": train_data["Fare"].median(), "Cabin": "Unknown", "Embarked": "S"}, inplace=True)
 test_data.fillna({"Age": test_data["Age"].median(), "Fare": test_data["Fare"].median(), "Cabin": "Unknown", "Embarked": "S"}, inplace=True)
@@ -42,6 +43,7 @@ test_data.fillna({"Age": test_data["Age"].median(), "Fare": test_data["Fare"].me
 # Simplify Cabin feature
 train_data["Cabin"] = np.where(train_data["Cabin"] == "Unknown", 0, 1)
 test_data["Cabin"] = np.where(test_data["Cabin"] == "Unknown", 0, 1)
+
 
 # Define categorical and numerical features
 categorical_features = ["Sex", "Embarked"]
@@ -58,11 +60,24 @@ preprocessor = ColumnTransformer(
 # Apply transformations
 X_train = preprocessor.fit_transform(train_data.drop(columns=["Survived"]))
 y_train = train_data["Survived"].values
+
+
+print(X_train[:5])
+
+
+
 X_test = preprocessor.transform(test_data)
 
 # Train Adaline model
-adaline = Adaline(learning_rate=0.001, epochs=1500)
+adaline = Adaline(learning_rate=0.001, epochs=1000)
 adaline.fit(X_train, y_train)
+
+print("Weights:", adaline.weights)
+print("Bias:", adaline.bias)
+
+y_train_pred = adaline.predict(X_train)
+train_accuracy = accuracy_score(y_train, y_train_pred)
+print(f"Training Accuracy: {train_accuracy}")
 
 # Predictions
 y_pred = adaline.predict(X_test)
@@ -71,12 +86,18 @@ y_pred = adaline.predict(X_test)
 def predict_new_passenger(passenger_details):
     df = pd.DataFrame([passenger_details], columns=columns)
     
-    # Process new passenger data
+    
     df["Cabin"] = np.where(df["Cabin"] == "Unknown", 0, 1)
     
     df = preprocessor.transform(df)
+
+    print("Predicted values distribution:", np.unique(y_train_pred, return_counts=True))
+
+
+    print("Actual values distribution:", np.unique(y_train, return_counts=True))
+    
     return "Survived" if adaline.predict(df)[0] == 1 else "Not Survived"
 
 # Example usage
-new_passenger = [1001, 1, "male",30, 0, 0, 25, "Unknown", "S"]
+new_passenger = [1001, 1, "male",15, 0, 0, 25, "Unknown", "S"]
 print(predict_new_passenger(new_passenger))
