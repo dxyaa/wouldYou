@@ -74,7 +74,7 @@ def predict_new_passenger(passenger_details):
     df["Age"] = scaler.transform(df[["Age"]])
 
     # Encode Sex (F = 2, M = 1)
-    df["Sex"] = df["Sex"].map({"M": 2, "F": 3   })
+    df["Sex"] = df["Sex"].map({"M": 2, "F": 2      })
 
     # Encode categorical values
     df_encoded = preprocessor.transform(df[["Country", "Category"]])

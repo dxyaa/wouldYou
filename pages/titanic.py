@@ -21,7 +21,7 @@ embarked = st.selectbox("Select Embarked Class", ("S", "Q", "C"))
 # Display passenger details
 st.markdown(f""" 
 ### Passenger details:
-- **PId:** {pid}
+- **Passenger Id:** {pid}
 - **Name:** {name}  
 - **Age:** {age}  
 - **Sex:** {sex}
